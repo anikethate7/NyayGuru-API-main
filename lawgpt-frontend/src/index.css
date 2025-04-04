@@ -1,0 +1,105 @@
+:root {
+  font-family: 'Inter', 'Roboto', system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light;
+  color: #000000;
+  background-color: #f0f0f0;
+
+  /* Updated Color Palette */
+  --primary-color: #4dabf7;       /* Light blue */
+  --primary-light: #74c0fc;       /* Lighter blue */
+  --primary-dark: #339af0;        /* Darker blue */
+  
+  --secondary-color: #74c0fc;     /* Secondary light blue */
+  --secondary-light: #a5d8ff;     /* Lighter blue */
+  --secondary-dark: #4dabf7;      /* Darker blue */
+  
+  --accent-color: #339af0;        /* Accent blue */
+  
+  /* Text Colors */
+  --text-color: #000000;          /* Black text */
+  --light-text-color: #555555;    /* Light gray text */
+  
+  /* Background & Surface Colors */
+  --background-color: #f0f0f0;    /* Light gray background */
+  --surface-color: #ffffff;       /* White surface */
+  
+  /* Message Colors */
+  --bot-message-color: #e9f3fd;   /* Very light blue for bot messages */
+  --bot-message-border: #c5e3fc;  /* Light blue border */
+  --user-message-text: #ffffff;   /* White text on user messages */
+  
+  /* UI Element Colors */
+  --sidebar-bg: #ffffff;
+  --sidebar-width: 280px;
+  --sidebar-item-hover: rgba(77, 171, 247, 0.1);  /* Light blue with opacity */
+  --sidebar-item-active: rgba(77, 171, 247, 0.15);
+  --header-height: 60px;
+  
+  /* Status Colors */
+  --success-color: #4dabf7;       /* Success blue */
+  --warning-color: #74c0fc;       /* Warning light blue */
+  --error-color: #000000;         /* Error black */
+  
+  --border-radius: 14px;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  font-weight: 500;
+  color: var(--primary-color);
+  text-decoration: inherit;
+  transition: color 0.2s ease;
+}
+a:hover {
+  color: var(--primary-light);
+}
+
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+  background-color: var(--background-color);
+  font-family: 'Inter', 'Roboto', sans-serif;
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+  font-weight: 600;
+}
+
+button {
+  border-radius: var(--border-radius);
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: 'Inter', 'Roboto', sans-serif;
+  background-color: #f1f3f4;
+  color: #333333;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+button:hover {
+  border-color: var(--primary-color);
+  transform: translateY(-1px);
+}
+button:focus,
+button:focus-visible {
+  outline: 2px solid var(--primary-light);
+  outline-offset: 2px;
+}
+
+#root {
+  width: 100%;
+  min-height: 100vh;
+}

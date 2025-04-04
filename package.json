@@ -1,0 +1,24 @@
+{
+  "name": "nyayguru-api",
+  "version": "1.0.0",
+  "description": "NyayGuru Legal AI Assistant API",
+  "scripts": {
+    "dev:backend": "python dev.py",
+    "dev:frontend": "cd lawgpt-frontend && npm run dev",
+    "dev": "npm run dev:backend",
+    "build:frontend": "cd lawgpt-frontend && npm run build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yourusername/nyayguru-api.git"
+  },
+  "keywords": [
+    "legal",
+    "ai",
+    "chatbot",
+    "fastapi"
+  ],
+  "author": "",
+  "license": "ISC"
+} 

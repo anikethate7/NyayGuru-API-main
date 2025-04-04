@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LawGPT - Legal Assistant</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        /* Custom Styles */
+        :root {
+            --primary-color: #3498db;
+            /* A nice blue */
+            --secondary-color: #2c3e50;
+            /* Dark gray for headers */
+            --background-color: #f0f4f8;
+            /* Light gray background */
+            --text-color: #333;
+            /* Dark text */
+            --light-text-color: #777;
+            /* Lighter text for secondary info */
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .chat-container {
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            /* Ensure rounded corners are respected */
+        }
+
+        .chat-header {
+            background-color: var(--secondary-color);
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .chat-messages {
+            height: 400px;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .message {
+            background-color: #eef2f6;
+            border-radius: 20px;
+            padding: 12px 20px;
+            margin-bottom: 10px;
+            max-width: 80%;
+            word-break: break-word;
+            /* Prevent long words from overflowing */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.07);
+            font-size: 0.95rem;
+        }
+
+        .user-message {
+            background-color: var(--primary-color);
+            color: white;
+            align-self: flex-end;
+        }
+
+        .bot-message {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            align-self: flex-start;
+        }
+
+        .sources {
+            font-size: 0.8em;
+            color: var(--light-text-color);
+            margin-top: 8px;
+        }
+
+        .chat-input {
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-top: 1px solid #eee;
+        }
+
+        #user-input {
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            padding: 10px 12px;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .btn-primary:hover {
+            background-color: darken(var(--primary-color), 10%);
+            border-color: darken(var(--primary-color), 10%);
+        }
+
+        .category-tabs {
+            background-color: #f1f3f5;
+            border-bottom: 1px solid #ddd;
+            padding: 10px 15px 0;
+        }
+
+        .category-tabs .nav-link {
+            color: var(--text-color);
+            border-radius: 8px 8px 0 0;
+            padding: 8px 15px;
+            margin-right: 5px;
+            font-size: 0.9rem;
+        }
+
+        .category-tabs .nav-link.active {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #ccc;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #bbb;
+        }
+
+        /* Loader Styling */
+        .loader {
+            border: 5px solid #f3f3f3;
+            /* Light grey */
+            border-top: 5px solid var(--primary-color);
+            /* Blue */
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 10px auto;
+            /* Center the loader */
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .loading-message {
+            text-align: center;
+            font-style: italic;
+            color: var(--light-text-color);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container mt-4">
+        <div class="chat-container">
+            <div class="chat-header">
+                <h2>LawGPT - Legal Assistant</h2>
+                <p>Your AI-powered legal assistant, ready to help!</p>
+            </div>
+            <div class="category-tabs">
+                <ul class="nav nav-tabs" id="category-tabs">
+                    <!-- Categories will be populated here -->
+                </ul>
+            </div>
+
+            <div class="chat-messages" id="chat-messages">
+                <div class="message bot-message">
+                    Hello! I'm LawGPT, your legal assistant. Select a legal category above and ask me a question.
+                </div>
+            </div>
+
+            <div class="chat-input">
+                <form id="chat-form">
+                    <div class="row g-3 align-items-center">
+                        <div class="col-md-4">
+                            <label for="language" class="form-label">Language</label>
+                            <select class="form-select" id="language">
+                                <option value="English" selected>English</option>
+                            </select>
+                        </div>
+                        <div class="col-md-8">
+                            <label for="user-input" class="form-label visually-hidden">Your Question</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="user-input"
+                                    placeholder="Type your legal question here..." required>
+                                <button class="btn btn-primary" type="submit">
+                                    <i class="bi bi-send"></i> Send
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // JavaScript Code
+        let sessionId = null;
+        let currentCategory = null;
+        const messagesContainer = document.getElementById('chat-messages');
+        const chatForm = document.getElementById('chat-form');
+        const userInput = document.getElementById('user-input');
+        const categoryTabs = document.getElementById('category-tabs');
+        const languageSelect = document.getElementById('language');
+
+        // --- Utility Functions ---
+        function scrollToBottom() {
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        function addMessage(text, sender, sources = null, isLoading = false) {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('message', `${sender}-message`);
+
+            if (isLoading) {
+                messageDiv.innerHTML = `
+                <div class="loader"></div>
+                <p class="loading-message">Generating response...</p>
+            `;
+            } else {
+                messageDiv.innerHTML = `<p>${text}</p>`;
+
+                if (sources && sources.length > 0) {
+                    const sourcesDiv = document.createElement('div');
+                    sourcesDiv.classList.add('sources');
+                    sourcesDiv.textContent = 'Sources: ' + sources.join(', ');
+                    messageDiv.appendChild(sourcesDiv);
+                }
+            }
+
+
+            messagesContainer.appendChild(messageDiv);
+            scrollToBottom();
+            return messageDiv; // Return the message div
+        }
+
+        function displayError(message) {
+            addMessage(`Error: ${message}`, 'bot');
+        }
+
+        function normalizeCategory(category) {
+            return category.toLowerCase().replace(/\s+/g, '-');
+        }
+
+        // --- API Interaction Functions ---
+        async function createSession() {
+            try {
+                const response = await fetch('/api/chat/session', {
+                    method: 'POST'
+                });
+                if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+                const data = await response.json();
+                return data.session_id;
+            } catch (error) {
+                console.error('Session creation failed:', error);
+                displayError('Failed to create a new session. Please refresh the page.');
+                return null;
+            }
+        }
+
+        async function fetchCategories() {
+            try {
+                const response = await fetch('/api/categories/');
+                if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+                const data = await response.json();
+                return data.categories;
+            } catch (error) {
+                console.error('Failed to fetch categories:', error);
+                displayError('Failed to load legal categories.');
+                return [];
+            }
+        }
+
+        async function fetchLanguages() {
+            try {
+                const response = await fetch('/api/categories/languages');
+                if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+                const data = await response.json();
+                return data.languages;
+            } catch (error) {
+                console.error('Failed to fetch languages:', error);
+                displayError('Failed to load language options.');
+                return {};
+            }
+        }
+
+        async function sendMessage(message, category, language) {
+            if (!category) {
+                displayError('Please select a legal category first.');
+                return;
+            }
+
+            addMessage(message, 'user');
+
+            // Add loading indicator
+            const loadingMessageDiv = addMessage('', 'bot', null, true);
+
+            try {
+                // Use category-specific endpoint
+                const normalizedCategory = normalizeCategory(category);
+                const endpoint = `/api/chat/category/${category}`;
+
+                const response = await fetch(endpoint, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        query: message,
+                        category: category,
+                        language: language,
+                        session_id: sessionId
+                    })
+                });
+
+                if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+
+                const data = await response.json();
+
+                // Replace loading indicator with the actual message
+                loadingMessageDiv.remove();
+                addMessage(data.answer, 'bot', data.sources);
+
+
+            } catch (error) {
+                console.error('Message sending failed:', error);
+                loadingMessageDiv.remove(); // Remove loading indicator on error
+                displayError('Failed to send your message. Please try again.');
+            }
+        }
+
+        function setActiveCategory(category) {
+            currentCategory = category;
+
+            // Update active tab
+            document.querySelectorAll('#category-tabs .nav-link').forEach(tab => {
+                tab.classList.remove('active');
+                if (tab.getAttribute('data-category') === category) {
+                    tab.classList.add('active');
+                }
+            });
+
+            // Add a message indicating category change
+            addMessage(`You are now in the "${category}" category. Please ask a relevant question.`, 'bot');
+        }
+
+        // --- Initialization and Event Handling ---
+        async function initialize() {
+            sessionId = await createSession();
+            if (!sessionId) return;
+
+            // Fetch and populate categories as tabs
+            const categories = await fetchCategories();
+            categories.forEach(category => {
+                const li = document.createElement('li');
+                li.className = 'nav-item';
+
+                const a = document.createElement('a');
+                a.className = 'nav-link';
+                a.href = '#';
+                a.textContent = category;
+                a.setAttribute('data-category', category);
+
+                a.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    setActiveCategory(category);
+                });
+
+                li.appendChild(a);
+                categoryTabs.appendChild(li);
+            });
+
+            // Populate language dropdown
+            const languages = await fetchLanguages();
+            for (const [name, code] of Object.entries(languages)) {
+                const option = new Option(name, name);
+                languageSelect.add(option);
+            }
+        }
+
+        chatForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const message = userInput.value.trim();
+
+            if (!sessionId) {
+                displayError('No active session. Refresh the page.');
+                return;
+            }
+            if (!currentCategory) {
+                displayError('Please select a legal category first.');
+                return;
+            }
+            if (!message) return;
+
+            userInput.value = ''; // Clear input immediately
+            await sendMessage(message, currentCategory, languageSelect.value);
+        });
+
+        document.addEventListener('DOMContentLoaded', initialize);
+    </script>
+</body>
+
+</html>
