@@ -14,6 +14,7 @@ const LoginPage = () => {
   const [formTouched, setFormTouched] = useState(false);
   const [pageLoaded, setPageLoaded] = useState(false);
   const [serverStatus, setServerStatus] = useState({ status: "checking", message: "Checking server status..." });
+  const [userType, setUserType] = useState("user"); // Default to user
 
   const { login, loading } = useAuth();
   const navigate = useNavigate();
@@ -65,6 +66,8 @@ const LoginPage = () => {
       setEmail(e.target.value);
     } else if (e.target.id === "password") {
       setPassword(e.target.value);
+    } else if (e.target.id === "userType") {
+      setUserType(e.target.value);
     }
   };
 
@@ -97,12 +100,10 @@ const LoginPage = () => {
     setIsSubmitting(true);
     setError("");
 
-    // Add a timeout to prevent infinite loading
     const loginTimeout = setTimeout(() => {
       setIsSubmitting(false);
       setError("Login request timed out. Please try again.");
       
-      // Add shake animation
       const formElement = document.querySelector('.auth-form-wrapper');
       if (formElement) {
         formElement.classList.add('shake');
@@ -110,26 +111,50 @@ const LoginPage = () => {
           formElement.classList.remove('shake');
         }, 500);
       }
-    }, 15000); // 15 seconds timeout
+    }, 15000);
 
     try {
-      console.log("LoginPage: Attempting login");
-      await login(email, password);
-      console.log("LoginPage: Login successful, redirecting");
-      clearTimeout(loginTimeout); // Clear timeout on success
-      navigate(redirectPath, { replace: true });
+      console.log("LoginPage: Attempting login as", userType);
+      const userData = await login(email, password, { userType });
+      console.log("LoginPage: Login successful, user data:", userData);
+      clearTimeout(loginTimeout);
+      
+      // Check if the user is actually a lawyer
+      if (userType === "lawyer") {
+        console.log("LoginPage: User is a lawyer, checking user type");
+        if (userData.user_type === "lawyer") {
+          console.log("LoginPage: User confirmed as lawyer, redirecting to dashboard");
+          // Force navigation to lawyer dashboard
+          window.location.href = "/lawyer-dashboard";
+        } else {
+          console.log("LoginPage: User is not a lawyer, access denied");
+          throw new Error("Access denied. This account is not registered as a lawyer.");
+        }
+      } else {
+        console.log("LoginPage: User is not a lawyer, redirecting to home");
+        navigate(redirectPath, { replace: true });
+      }
     } catch (err) {
-      clearTimeout(loginTimeout); // Clear timeout on error
+      clearTimeout(loginTimeout);
       console.error("LoginPage: Login failed:", err);
       
-      // Display a user-friendly error message
-      setError(
-        err.message || 
-        err.response?.data?.detail || 
-        "Failed to login. Please check your credentials."
-      );
+      // Set a user-friendly error message
+      let errorMessage = "Login failed. Please try again.";
       
-      // Add shake animation to the form
+      if (err.response) {
+        if (err.response.status === 401) {
+          errorMessage = "Invalid email or password. Please try again.";
+        } else if (err.response.status === 403) {
+          errorMessage = "Access denied. Please check your user type.";
+        } else if (err.response.data?.detail) {
+          errorMessage = err.response.data.detail;
+        }
+      } else if (err.message) {
+        errorMessage = err.message;
+      }
+      
+      setError(errorMessage);
+      
       const formElement = document.querySelector('.auth-form-wrapper');
       if (formElement) {
         formElement.classList.add('shake');
@@ -149,17 +174,18 @@ const LoginPage = () => {
     console.log("Google login credential received:", credentialResponse);
     
     try {
-      // Send the Google token to our backend using API service
       console.log("Sending token to backend:", credentialResponse.credential);
-      const response = await api.googleLogin(credentialResponse.credential);
+      const response = await api.googleLogin(credentialResponse.credential, { userType });
       
       console.log("Response from backend:", response);
       
-      // Update auth context with Google data
       await login(null, null, response);
       
-      // Redirect
-      navigate(redirectPath, { replace: true });
+      if (userType === "lawyer") {
+        navigate("/lawyer-dashboard", { replace: true });
+      } else {
+        navigate(redirectPath, { replace: true });
+      }
     } catch (err) {
       console.error("Google login error details:", err);
       setError(
@@ -168,7 +194,6 @@ const LoginPage = () => {
         "Failed to login with Google. Please try again."
       );
       
-      // Add shake animation to the form
       const formElement = document.querySelector('.auth-form-wrapper');
       if (formElement) {
         formElement.classList.add('shake');
@@ -223,6 +248,26 @@ const LoginPage = () => {
             <i className="bi bi-exclamation-triangle"></i> {error}
           </div>
         )}
+
+        <div className="user-type-selector">
+          <label>Login as:</label>
+          <div className="user-type-buttons">
+            <button
+              type="button"
+              className={`user-type-btn ${userType === 'user' ? 'active' : ''}`}
+              onClick={() => setUserType('user')}
+            >
+              User
+            </button>
+            <button
+              type="button"
+              className={`user-type-btn ${userType === 'lawyer' ? 'active' : ''}`}
+              onClick={() => setUserType('lawyer')}
+            >
+              Lawyer
+            </button>
+          </div>
+        </div>
 
         <form onSubmit={handleSubmit} className="auth-form">
           <div className="form-group">
@@ -287,7 +332,12 @@ const LoginPage = () => {
 
         <div className="auth-links">
           <p>
-            Don't have an account? <Link to="/signup">Sign up</Link>
+            Don't have an account?{" "}
+            {userType === "lawyer" ? (
+              <Link to="/lawyer-signup">Sign up as Lawyer</Link>
+            ) : (
+              <Link to="/signup">Sign up as User</Link>
+            )}
           </p>
           <p>
             <Link to="/forgot-password">Forgot your password?</Link>

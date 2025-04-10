@@ -50,9 +50,9 @@ const HomePage = () => {
       title: "Lawyer Support", 
       icon: "bi-person-badge-fill",
       description: "Connect with verified lawyers for professional legal consultation.",
-      buttonText: "Coming Soon",
-      route: "#",
-      comingSoon: true
+      buttonText: "Lawyer Support",
+      route: "/lawyer-support",
+      // comingSoon: true
     },
     { 
       id: "forum", 
@@ -60,8 +60,8 @@ const HomePage = () => {
       icon: "bi-people-fill",
       description: "Join discussions with others facing similar legal challenges.",
       buttonText: "Coming Soon",
-      route: "#",
-      comingSoon: true
+      route: "/lawyer-support",
+      // comingSoon: true
     },
     { 
       id: "resources", 

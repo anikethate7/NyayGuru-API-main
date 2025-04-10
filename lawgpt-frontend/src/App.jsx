@@ -1,18 +1,22 @@
 import { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import "./styles/App.css";
+import "./styles/LawyerAuth.css";
 import Navbar from "./components/Navbar";
 import ChatLayout from "./components/ChatLayout";
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
+import LawyerSignupPage from "./pages/LawyerSignupPage";
 import ProfilePage from "./pages/ProfilePage";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import LegalDictionary from "./pages/LegalDictionary";
 import DocumentAnalysis from "./pages/DocumentAnalysis";
 import NotFound from "./pages/NotFound";
+import LawyerDashboard from "./components/LawyerDashboard";
 import { SessionProvider } from "./context/SessionContext";
 import { AuthProvider, useAuth } from "./context/AuthContext";
+import LawyerListing from "./components/LawyerListing";
 
 // ProtectedRoute component
 const ProtectedRoute = ({ children }) => {
@@ -60,13 +64,14 @@ const PublicRoute = ({ children }) => {
 
 // App Layout Component
 const AppLayout = () => {
-  const { loading } = useAuth();
+  const { loading, currentUser } = useAuth();
   const location = useLocation();
   
   // Check if we're on an auth page (login, signup, or forgot password)
   const isAuthPage = 
     location.pathname === '/login' || 
     location.pathname === '/signup' || 
+    location.pathname === '/lawyer-signup' ||
     location.pathname === '/forgot-password';
   
   // Check if we're on the home page
@@ -77,8 +82,11 @@ const AppLayout = () => {
     location.pathname === '/chat' || 
     location.pathname.startsWith('/category/');
     
-  // Check if we're on the document analysis page
+  // Check if we're on the document page
   const isDocumentPage = location.pathname === '/documents';
+
+  // Check if we're on the lawyer dashboard
+  const isLawyerDashboard = location.pathname === '/lawyer-dashboard';
   
   if (loading) {
     return (
@@ -109,6 +117,22 @@ const AppLayout = () => {
       </div>
     );
   }
+
+  // For lawyer dashboard, we don't want to show the regular navbar
+  if (isLawyerDashboard) {
+    console.log("Lawyer dashboard route accessed");
+    return (
+      <div className="App full-page">
+        <Routes>
+          <Route path="/lawyer-dashboard" element={
+            <ProtectedRoute>
+              <LawyerDashboard />
+            </ProtectedRoute>
+          } />
+        </Routes>
+      </div>
+    );
+  }
   
   return (
     <div className="App">
@@ -125,6 +149,11 @@ const AppLayout = () => {
           <Route path="/signup" element={
             <PublicRoute>
               <SignupPage />
+            </PublicRoute>
+          } />
+          <Route path="/lawyer-signup" element={
+            <PublicRoute>
+              <LawyerSignupPage />
             </PublicRoute>
           } />
           <Route path="/forgot-password" element={
@@ -147,6 +176,11 @@ const AppLayout = () => {
               <DocumentAnalysis />
             </ProtectedRoute>
           } />
+          <Route path="/lawyer-support" element={
+            <ProtectedRoute>
+              <LawyerListing />
+            </ProtectedRoute>
+          } />
           <Route path="/" element={
             <ProtectedRoute>
               <HomePage />
@@ -157,7 +191,7 @@ const AppLayout = () => {
       </main>
       
       {/* Only show footer when not on auth pages or chat pages or document pages */}
-      {!isAuthPage && !isChatPage && !isDocumentPage && (
+      {!isAuthPage && !isChatPage && !isDocumentPage && !isLawyerDashboard && (
         <footer className="app-footer">
           <div className="footer-content">
             <p>&copy; {new Date().getFullYear()} NyayGuru - Legal AI Assistant. All rights reserved.</p>

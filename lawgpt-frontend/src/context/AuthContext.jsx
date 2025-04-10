@@ -69,7 +69,7 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   // Login function
-  const login = async (email, password, googleData = null) => {
+  const login = async (email, password, options = {}) => {
     setLoading(true);
     setError(null);
 
@@ -81,16 +81,10 @@ export const AuthProvider = ({ children }) => {
     }, 20000); // 20 seconds timeout as a last resort
 
     try {
-      let response;
+      console.log("AuthContext: Attempting login for", email, "as", options.userType || "user");
       
-      // If we have googleData, use that instead of email/password
-      if (googleData) {
-        console.log("AuthContext: Using Google login data");
-        response = googleData;
-      } else {
-        console.log("AuthContext: Attempting login for", email);
-        response = await api.login(email, password);
-      }
+      // Add user type to the login request
+      const response = await api.login(email, password, options.userType);
       
       // Clear the timeout when we get a response
       clearTimeout(loginTimeoutId);
@@ -110,8 +104,19 @@ export const AuthProvider = ({ children }) => {
       console.error("AuthContext: Login error:", err);
       
       // Set a user-friendly error message
-      const errorMessage = err.message || 
-        (err.response?.data?.detail ? err.response.data.detail : "Login failed. Please try again.");
+      let errorMessage = "Login failed. Please try again.";
+      
+      if (err.response) {
+        if (err.response.status === 401) {
+          errorMessage = "Invalid email or password. Please try again.";
+        } else if (err.response.status === 403) {
+          errorMessage = "Access denied. Please check your user type.";
+        } else if (err.response.data?.detail) {
+          errorMessage = err.response.data.detail;
+        }
+      } else if (err.message) {
+        errorMessage = err.message;
+      }
       
       setError(errorMessage);
       

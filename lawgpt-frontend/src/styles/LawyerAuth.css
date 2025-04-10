@@ -1,0 +1,121 @@
+.user-type-selector {
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.user-type-selector label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: #333;
+}
+
+.user-type-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.user-type-btn {
+  padding: 0.5rem 1.5rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 25px;
+  background: white;
+  color: #666;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.user-type-btn:hover {
+  border-color: #4a90e2;
+  color: #4a90e2;
+}
+
+.user-type-btn.active {
+  background: #4a90e2;
+  border-color: #4a90e2;
+  color: white;
+}
+
+/* Lawyer signup form specific styles */
+.lawyer-signup-form .form-group {
+  margin-bottom: 1.5rem;
+}
+
+.lawyer-signup-form label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: #333;
+}
+
+.lawyer-signup-form input[type="text"],
+.lawyer-signup-form input[type="email"],
+.lawyer-signup-form input[type="password"],
+.lawyer-signup-form input[type="tel"],
+.lawyer-signup-form input[type="number"],
+.lawyer-signup-form select,
+.lawyer-signup-form textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+.lawyer-signup-form input:focus,
+.lawyer-signup-form select:focus,
+.lawyer-signup-form textarea:focus {
+  border-color: #4a90e2;
+  outline: none;
+}
+
+.lawyer-signup-form textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.lawyer-signup-form select {
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 1em;
+}
+
+.lawyer-signup-form .file-input-wrapper {
+  position: relative;
+  margin-top: 0.5rem;
+}
+
+.lawyer-signup-form input[type="file"] {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px dashed #ddd;
+  border-radius: 4px;
+  background: #f9f9f9;
+  cursor: pointer;
+}
+
+.lawyer-signup-form input[type="file"]:hover {
+  border-color: #4a90e2;
+  background: #f0f7ff;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .user-type-buttons {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .user-type-btn {
+    width: 100%;
+  }
+
+  .lawyer-signup-form {
+    padding: 1rem;
+  }
+} 

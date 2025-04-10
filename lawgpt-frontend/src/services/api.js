@@ -62,13 +62,14 @@ const api = {
     }
   },
 
-  login: async (email, password) => {
+  login: async (email, password, userType = "user") => {
     try {
-      console.log("Attempting login with:", { email });
+      console.log("Attempting login with:", { email, userType });
       
       const response = await axiosInstance.post('/auth/token', new URLSearchParams({
         username: email,
-        password: password
+        password: password,
+        user_type: userType
       }), {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
@@ -87,7 +88,11 @@ const api = {
       // Create a user object from the email as username
       return {
         token: response.data.access_token,
-        user: { username: email.split('@')[0], email: email }
+        user: { 
+          username: email.split('@')[0], 
+          email: email,
+          user_type: userType
+        }
       };
     } catch (error) {
       console.error("Login error:", error);
@@ -101,6 +106,8 @@ const api = {
       if (error.response) {
         if (error.response.status === 401) {
           throw new Error("Invalid username or password. Please try again.");
+        } else if (error.response.status === 403) {
+          throw new Error("Access denied. Please check your user type.");
         } else if (error.response.status === 429) {
           throw new Error("Too many login attempts. Please try again later.");
         } else if (error.response.data && error.response.data.detail) {

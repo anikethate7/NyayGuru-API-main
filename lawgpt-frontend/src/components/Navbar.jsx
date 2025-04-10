@@ -13,6 +13,7 @@ const Navbar = () => {
   const isDocumentPage = location.pathname === '/documents';
   const isDictionaryPage = location.pathname === '/dictionary';
   const isChatPage = location.pathname === '/chat' || location.pathname.startsWith('/category/');
+  const isLawyerDashboard = location.pathname === '/lawyer-dashboard';
 
   useEffect(() => {
     const handleScroll = () => {
@@ -67,9 +68,14 @@ const Navbar = () => {
               </Link>
               
               {currentUser && (
-                <Link to="/profile" className={`nav-link ${location.pathname === '/profile' ? 'active' : ''}`}>
-                  <i className="bi bi-person"></i> Profile
-                </Link>
+                <>
+                  <Link to="/profile" className={`nav-link ${location.pathname === '/profile' ? 'active' : ''}`}>
+                    <i className="bi bi-person"></i> Profile
+                  </Link>
+                  <Link to="/lawyer-dashboard" className={`nav-link ${isLawyerDashboard ? 'active' : ''}`}>
+                    <i className="bi bi-briefcase"></i> Lawyer Dashboard
+                  </Link>
+                </>
               )}
             </>
           ) : (
@@ -86,6 +92,12 @@ const Navbar = () => {
                 <Link to="/dictionary" className={`nav-link ${isDictionaryPage ? 'active' : ''}`}>
                   <i className="bi bi-book"></i> Legal Dictionary
                 </Link>
+
+                {currentUser && (
+                  <Link to="/lawyer-dashboard" className={`nav-link ${isLawyerDashboard ? 'active' : ''}`}>
+                    <i className="bi bi-briefcase"></i> Lawyer Dashboard
+                  </Link>
+                )}
               </>
             )
           )}
