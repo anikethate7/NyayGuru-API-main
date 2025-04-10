@@ -205,7 +205,7 @@ const ProfilePage = () => {
                 {editMode ? (
                   <><i className="bi bi-x-lg"></i> Cancel</>
                 ) : (
-                  <><i className="bi bi-pencil"></i> Edit Profile</>
+                  <><i className="bi bi-pencil"></i> Edit</>
                 )}
               </button>
             </div>

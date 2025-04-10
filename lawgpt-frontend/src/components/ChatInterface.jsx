@@ -3,7 +3,7 @@ import '../styles/ChatInterface.css';
 
 const ChatInterface = () => {
   const [messages, setMessages] = useState([
-    { id: 1, text: "Hello! I'm NyayGuru, your legal assistant. How can I help you today?", sender: 'bot', timestamp: new Date() },
+    { id: 1, text: "Hello! I'm Lawzo, your legal assistant. How can I help you today?", sender: 'bot', timestamp: new Date() },
   ]);
   const [inputText, setInputText] = useState('');
   const [isTyping, setIsTyping] = useState(false);
@@ -232,7 +232,7 @@ const ChatInterface = () => {
         <div className="chat-header-info">
           <div className="chat-logo">
             <i className="bi bi-stars"></i>
-            <h2>NyayGuru</h2>
+            <h2>Lawzo</h2>
           </div>
           <div className="status">
             <span className="status-indicator"></span>

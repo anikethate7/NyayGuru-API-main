@@ -40,7 +40,7 @@ const Header = () => {
         <div className="logo">
           <i className="bi bi-briefcase-fill"></i>
           <div>
-            <h1>NyayGuru</h1>
+            <h1>Lawzo</h1>
             <p className="tagline">Your AI Legal Assistant</p>
           </div>
         </div>

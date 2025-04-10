@@ -4,44 +4,44 @@
   font-weight: 400;
 
   color-scheme: light;
-  color: #000000;
-  background-color: #f0f0f0;
+  color: #1E293B;
+  background-color: #FFFFFF;
 
-  /* Updated Color Palette */
-  --primary-color: #4dabf7;       /* Light blue */
-  --primary-light: #74c0fc;       /* Lighter blue */
-  --primary-dark: #339af0;        /* Darker blue */
+  /* Updated Color Palette - Modern Theme */
+  --primary-color: #7C3AED;     /* Violet */
+  --primary-light: #F5F3FF;     /* Light violet */
+  --primary-dark: #6D28D9;      /* Dark violet */
   
-  --secondary-color: #74c0fc;     /* Secondary light blue */
-  --secondary-light: #a5d8ff;     /* Lighter blue */
-  --secondary-dark: #4dabf7;      /* Darker blue */
+  --secondary-color: #F97316;   /* Orange */
+  --secondary-light: #FFF7ED;   /* Light orange */
+  --secondary-dark: #EA580C;    /* Dark orange */
   
-  --accent-color: #339af0;        /* Accent blue */
+  --accent-color: #F97316;      /* Orange accent */
   
   /* Text Colors */
-  --text-color: #000000;          /* Black text */
-  --light-text-color: #555555;    /* Light gray text */
+  --text-color: #1E293B;        /* Slate 800 */
+  --light-text-color: #64748B;  /* Slate 500 */
   
   /* Background & Surface Colors */
-  --background-color: #f0f0f0;    /* Light gray background */
-  --surface-color: #ffffff;       /* White surface */
+  --background-color: #FFFFFF;  /* Pure white */
+  --surface-color: #FFFFFF;     /* White surface */
   
   /* Message Colors */
-  --bot-message-color: #e9f3fd;   /* Very light blue for bot messages */
-  --bot-message-border: #c5e3fc;  /* Light blue border */
-  --user-message-text: #ffffff;   /* White text on user messages */
+  --bot-message-color: #F5F3FF; /* Very light violet */
+  --bot-message-border: #E9D5FF;/* Light violet border */
+  --user-message-text: #FFFFFF; /* White text */
   
   /* UI Element Colors */
-  --sidebar-bg: #ffffff;
+  --sidebar-bg: #FFFFFF;
   --sidebar-width: 280px;
-  --sidebar-item-hover: rgba(77, 171, 247, 0.1);  /* Light blue with opacity */
-  --sidebar-item-active: rgba(77, 171, 247, 0.15);
+  --sidebar-item-hover: rgba(124, 58, 237, 0.05);
+  --sidebar-item-active: rgba(124, 58, 237, 0.1);
   --header-height: 60px;
   
   /* Status Colors */
-  --success-color: #4dabf7;       /* Success blue */
-  --warning-color: #74c0fc;       /* Warning light blue */
-  --error-color: #000000;         /* Error black */
+  --success-color: #10B981;     /* Emerald */
+  --warning-color: #F97316;     /* Orange */
+  --error-color: #EF4444;       /* Red */
   
   --border-radius: 14px;
 

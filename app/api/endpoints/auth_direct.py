@@ -12,7 +12,7 @@ from typing import Optional
 from app.config import settings
 
 # Path to the database
-DB_PATH = "./new_app.db"
+DB_PATH = "./app.db"
 
 # Setup router
 router = APIRouter()
@@ -27,6 +27,7 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="api/auth/token")
 class Token(BaseModel):
     access_token: str
     token_type: str
+    user: Optional[dict] = None
 
 class TokenData(BaseModel):
     username: Optional[str] = None
@@ -182,7 +183,18 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
             expires_delta=access_token_expires
         )
         
-        return Token(access_token=access_token, token_type="bearer")
+        # Return token with user data
+        return Token(
+            access_token=access_token, 
+            token_type="bearer",
+            user={
+                "id": user["id"],
+                "username": user["username"],
+                "email": user["email"],
+                "full_name": user["full_name"] or "",
+                "is_active": bool(user["is_active"])
+            }
+        )
     
     except HTTPException:
         raise
@@ -193,9 +205,9 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
             detail="Internal server error during login"
         )
 
-@router.post("/register", response_model=User, status_code=status.HTTP_201_CREATED)
+@router.post("/register", status_code=status.HTTP_201_CREATED)
 async def register(user_create: UserCreate):
-    """Register a new user."""
+    """Register a new user and return token for auto-login."""
     try:
         # Check if email already exists
         existing_email = get_user_by_email(user_create.email)
@@ -239,13 +251,27 @@ async def register(user_create: UserCreate):
         conn.commit()
         conn.close()
         
-        # Return the created user
-        return User(
-            id=user_id,
-            username=user_create.username,
-            email=user_create.email,
-            full_name=user_create.full_name,
-            is_active=True
+        # Create a user object for the response
+        created_user = {
+            "id": user_id,
+            "username": user_create.username,
+            "email": user_create.email,
+            "full_name": user_create.full_name or "",
+            "is_active": True
+        }
+        
+        # Generate access token for auto-login
+        access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
+        access_token = create_access_token(
+            data={"sub": user_create.username},
+            expires_delta=access_token_expires
+        )
+        
+        # Return token with user data for auto-login
+        return Token(
+            access_token=access_token,
+            token_type="bearer",
+            user=created_user
         )
     
     except HTTPException:
@@ -277,4 +303,61 @@ async def refresh_token(current_user: User = Depends(get_current_active_user)):
 @router.get("/test", status_code=status.HTTP_200_OK)
 async def test_endpoint():
     """Test endpoint to check if auth API is working."""
-    return {"message": "Direct Auth API is working!"} 
+    # Count the number of users to check database connectivity without exposing sensitive data
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("SELECT COUNT(*) FROM users")
+        user_count = cursor.fetchone()[0]
+        conn.close()
+        
+        return {
+            "message": "Direct Auth API is working!",
+            "status": "success",
+            "database": DB_PATH, 
+            "database_connected": True,
+            "user_count": user_count,
+            "token_settings": {
+                "algorithm": settings.ALGORITHM,
+                "expire_minutes": settings.ACCESS_TOKEN_EXPIRE_MINUTES
+            }
+        }
+    except Exception as e:
+        return {
+            "message": "Direct Auth API is accessible but database connection failed",
+            "status": "partial_failure",
+            "error": str(e),
+            "database": DB_PATH
+        }
+
+@router.get("/test-db", status_code=status.HTTP_200_OK)
+async def test_db_connection():
+    """Test endpoint to verify database connection."""
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        
+        # Check if users table exists
+        cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='users'")
+        table_exists = cursor.fetchone()
+        
+        # Check user count
+        user_count = 0
+        if table_exists:
+            cursor.execute("SELECT COUNT(*) FROM users")
+            user_count = cursor.fetchone()[0]
+        
+        conn.close()
+        
+        return {
+            "database": DB_PATH,
+            "connection": "successful",
+            "users_table_exists": table_exists is not None,
+            "user_count": user_count
+        }
+    except Exception as e:
+        return {
+            "database": DB_PATH,
+            "connection": "failed",
+            "error": str(e)
+        } 

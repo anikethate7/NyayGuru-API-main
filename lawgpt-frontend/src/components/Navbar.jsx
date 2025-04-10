@@ -1,10 +1,9 @@
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 const Navbar = () => {
-  const { currentUser, logout } = useAuth();
+  const { currentUser } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const navigate = useNavigate();
@@ -33,25 +32,42 @@ const Navbar = () => {
     setIsMenuOpen(false);
   }, [location.pathname]);
 
-  const handleLogout = async () => {
-    try {
-      await logout();
-      navigate('/login');
-    } catch (e) {
-      console.error('Failed to logout', e);
+  const scrollToSection = (sectionId) => {
+    // If not on homepage, navigate to homepage first
+    if (!isHomePage) {
+      navigate('/', { state: { scrollTo: sectionId } });
+      return;
+    }
+    
+    // If already on homepage, scroll to the section
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
-  // Check if we are on a page that should show only Home and Profile tabs
-  const showLimitedTabs = isDocumentPage || isDictionaryPage || isChatPage;
+  // Check for scrollTo in location state when component mounts or updates
+  useEffect(() => {
+    if (isHomePage && location.state && location.state.scrollTo) {
+      const sectionId = location.state.scrollTo;
+      // Short delay to ensure the homepage has rendered
+      setTimeout(() => {
+        const element = document.getElementById(sectionId);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+        // Clear the state after scrolling
+        navigate('/', { replace: true, state: {} });
+      }, 100);
+    }
+  }, [isHomePage, location.state, navigate]);
 
   return (
     <nav className={`app-navbar ${scrolled ? 'scrolled' : ''}`}>
       <div className="navbar-container">
         <Link to="/" className="navbar-brand">
-          <i className="bi bi-briefcase-fill"></i>
-          <div>
-            <h1>Nyay<span style={{ fontWeight: 400 }}>Guru</span></h1>
+          <img src="/images/logo.svg" alt="Lawzo Logo" className="logo" />
+          <div className="brand-text">
             <p className="tagline">Your AI Legal Assistant</p>
           </div>
         </Link>
@@ -61,6 +77,7 @@ const Navbar = () => {
         </div>
         
         <div className={`navbar-links ${isMenuOpen ? 'open' : ''}`}>
+<<<<<<< HEAD
           {showLimitedTabs ? (
             <>
               <Link to="/" className={`nav-link ${isHomePage ? 'active' : ''}`}>
@@ -100,32 +117,47 @@ const Navbar = () => {
                 )}
               </>
             )
+=======
+          <Link to="/" className={`nav-link ${isHomePage ? 'active' : ''}`}>
+            Home
+          </Link>
+          
+          <button 
+            onClick={() => scrollToSection('services')}
+            className={`nav-link ${isHomePage && location.hash === '#services' ? 'active' : ''}`}
+          >
+            Services
+          </button>
+          
+          <button
+            onClick={() => scrollToSection('category')}
+            className={`nav-link ${isHomePage && location.hash === '#category' ? 'active' : ''}`}
+          >
+            Category
+          </button>
+          
+          <button
+            onClick={() => scrollToSection('why-us')}
+            className={`nav-link ${isHomePage && location.hash === '#why-us' ? 'active' : ''}`}
+          >
+            Why Us
+          </button>
+          
+          {currentUser && (
+            <Link to="/profile" className={`nav-link profile-icon ${location.pathname === '/profile' ? 'active' : ''}`} aria-label="Profile">
+              <i className="bi bi-person-circle"></i>
+            </Link>
+>>>>>>> 075b9a52b7599dffb32878a80b773bd023c4205c
           )}
           
           <div className="nav-auth-section">
-            {currentUser ? (
-              <>
-                {!showLimitedTabs && (
-                  <Link to="/profile" className={`nav-link ${location.pathname === '/profile' ? 'active' : ''}`}>
-                    <i className="bi bi-person"></i> Profile
-                  </Link>
-                )}
-                
-                <button className="nav-link logout-btn" onClick={handleLogout}>
-                  <i className="bi bi-box-arrow-right"></i> Logout
-                </button>
-                <div className="user-profile">
-                  <i className="bi bi-person-circle"></i>
-                  <span className="username">{currentUser.username || currentUser.email}</span>
-                </div>
-              </>
-            ) : (
+            {!currentUser && (
               <>
                 <Link to="/login" className="nav-link">
-                  <i className="bi bi-box-arrow-in-right"></i> Login
+                  Login
                 </Link>
                 <Link to="/signup" className="nav-link signup">
-                  <i className="bi bi-person-plus"></i> Sign Up
+                  Sign Up
                 </Link>
               </>
             )}

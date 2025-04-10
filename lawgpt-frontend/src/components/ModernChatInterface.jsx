@@ -7,7 +7,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 const ModernChatInterface = ({ initialQuery, initialCategory }) => {
   const [messages, setMessages] = useState([
-    { id: 1, text: "Hello! I'm NyayGuru, your legal assistant. How can I help you today?", sender: 'bot', timestamp: new Date() },
+    { id: 1, text: "Hello! I'm Lawzo, your legal assistant. How can I help you today?", sender: 'bot', timestamp: new Date() },
   ]);
   const [inputText, setInputText] = useState(initialQuery || '');
   const [isTyping, setIsTyping] = useState(false);

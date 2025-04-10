@@ -138,21 +138,40 @@ export const AuthProvider = ({ children }) => {
     try {
       if (googleData) {
         // If we have googleData, use that directly
-        const { user, access_token } = googleData.data;
-        localStorage.setItem("authToken", access_token);
+        // googleData is already the response object with token and user
+        console.log("Using Google data for signup:", googleData);
+        
+        const token = googleData.token || googleData.access_token;
+        const user = googleData.user;
+        
+        if (!token || !user) {
+          console.error("Invalid Google login data:", googleData);
+          throw new Error("Invalid response from Google login");
+        }
+        
+        localStorage.setItem("authToken", token);
         localStorage.setItem("user", JSON.stringify(user));
         setCurrentUser(user);
         return user;
       } else {
         // Normal signup flow
-        const { user, token } = await api.register(userData);
-        localStorage.setItem("authToken", token);
-        localStorage.setItem("user", JSON.stringify(user));
-        setCurrentUser(user);
-        return user;
+        const response = await api.register(userData);
+        console.log("Signup successful:", response);
+        
+        if (!response.token || !response.user) {
+          throw new Error("Invalid response from server. Registration failed.");
+        }
+        
+        localStorage.setItem("authToken", response.token);
+        localStorage.setItem("user", JSON.stringify(response.user));
+        setCurrentUser(response.user);
+        return response.user;
       }
     } catch (err) {
-      setError(err.message || "Signup failed. Please try again.");
+      console.error("Signup error:", err);
+      const errorMessage = err.message || 
+        (err.response?.data?.detail ? err.response.data.detail : "Signup failed. Please try again.");
+      setError(errorMessage);
       throw err;
     } finally {
       setLoading(false);

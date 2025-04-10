@@ -1,54 +1,48 @@
-import { useState, useRef, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import '../styles/HomePage.css';
+import { useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import "../styles/HomePage.css";
 
 const HomePage = () => {
   const navigate = useNavigate();
-  const [searchQuery, setSearchQuery] = useState('');
-  
+  const [searchQuery, setSearchQuery] = useState("");
+
   // Active indicators
   const [activeFeatureIndex, setActiveFeatureIndex] = useState(0);
   const [activeCategoryIndex, setActiveCategoryIndex] = useState(0);
-  
+
   // Auto-scroll state
   const [autoScrollFeatures, setAutoScrollFeatures] = useState(true);
   const [autoScrollCategories, setAutoScrollCategories] = useState(true);
-  
+
   // Refs for scrolling
   const featuresRef = useRef(null);
   const categoriesRef = useRef(null);
-  
+
   // Feature cards configuration
   const featureCards = [
-    { 
-      id: "chat", 
-      title: "Legal Chat", 
+    {
+      id: "chat",
+      title: "Legal Chat",
       icon: "bi-chat-dots-fill",
-      description: "Get answers to your legal questions with our advanced AI assistant.",
+      description:
+        "Get answers to your legal questions with our advanced AI assistant.",
       buttonText: "Start Chat",
       route: "/chat",
-      highlight: true
+      highlight: true,
     },
-    { 
-      id: "dictionary", 
-      title: "Legal Dictionary", 
-      icon: "bi-book-fill",
-      description: "Access a comprehensive dictionary of legal terms and concepts.",
-      buttonText: "Browse Dictionary",
-      route: "/dictionary"
-    },
-    { 
-      id: "documents", 
-      title: "Document Analysis", 
+    {
+      id: "documents",
+      title: "Document Analysis",
       icon: "bi-file-text-fill",
       description: "Upload and analyze legal documents to extract insights.",
       buttonText: "Analyze Documents",
-      route: "/documents"
+      route: "/documents",
     },
-    { 
-      id: "lawyers", 
-      title: "Lawyer Support", 
+    {
+      id: "lawyers",
+      title: "Lawyer Support",
       icon: "bi-person-badge-fill",
+<<<<<<< HEAD
       description: "Connect with verified lawyers for professional legal consultation.",
       buttonText: "Lawyer Support",
       route: "/lawyer-support",
@@ -62,32 +56,39 @@ const HomePage = () => {
       buttonText: "Coming Soon",
       route: "/lawyer-support",
       // comingSoon: true
-    },
-    { 
-      id: "resources", 
-      title: "Legal Resources", 
-      icon: "bi-journal-text",
-      description: "Access a library of templates, guides, and legal resources.",
+=======
+      description:
+        "Connect with verified lawyers for professional legal consultation.",
       buttonText: "Coming Soon",
       route: "#",
-      comingSoon: true
-    }
+      comingSoon: true,
+    },
+    {
+      id: "dictionary",
+      title: "Legal Dictionary",
+      icon: "bi-book-fill",
+      description:
+        "Access a comprehensive dictionary of legal terms and concepts.",
+      buttonText: "Browse Dictionary",
+      route: "/dictionary",
+>>>>>>> 075b9a52b7599dffb32878a80b773bd023c4205c
+    },
   ];
-  
+
   // Popular legal categories
   const popularCategories = [
-    { name: 'Criminal Law', path: '/chat', icon: 'bi-shield-fill' },
-    { name: 'Property Law', path: '/chat', icon: 'bi-house-fill' },
-    { name: 'Family Law', path: '/chat', icon: 'bi-people-fill' },
-    { name: 'Cyber Law', path: '/chat', icon: 'bi-laptop-fill' },
-    { name: 'Corporate Law', path: '/chat', icon: 'bi-building-fill' },
-    { name: 'Civil Law', path: '/chat', icon: 'bi-bank2' },
-    { name: 'Tax Law', path: '/chat', icon: 'bi-cash-stack' },
-    { name: 'Labor Law', path: '/chat', icon: 'bi-briefcase-fill' },
-    { name: 'Environmental Law', path: '/chat', icon: 'bi-tree-fill' },
-    { name: 'Immigration Law', path: '/chat', icon: 'bi-globe' },
-    { name: 'Intellectual Property', path: '/chat', icon: 'bi-lightbulb-fill' },
-    { name: 'Constitutional Law', path: '/chat', icon: 'bi-journal-text' }
+    { name: "Criminal Law", path: "/chat", icon: "bi-shield-fill" },
+    { name: "Property Law", path: "/chat", icon: "bi-house-fill" },
+    { name: "Family Law", path: "/chat", icon: "bi-people-fill" },
+    { name: "Cyber Law", path: "/chat", icon: "bi-laptop-fill" },
+    { name: "Corporate Law", path: "/chat", icon: "bi-building-fill" },
+    { name: "Civil Law", path: "/chat", icon: "bi-bank2" },
+    { name: "Tax Law", path: "/chat", icon: "bi-cash-stack" },
+    { name: "Labor Law", path: "/chat", icon: "bi-briefcase-fill" },
+    { name: "Environmental Law", path: "/chat", icon: "bi-tree-fill" },
+    { name: "Immigration Law", path: "/chat", icon: "bi-globe" },
+    { name: "Intellectual Property", path: "/chat", icon: "bi-lightbulb-fill" },
+    { name: "Constitutional Law", path: "/chat", icon: "bi-journal-text" },
   ];
 
   // Handle scroll events to update active indicators
@@ -100,7 +101,7 @@ const HomePage = () => {
         setActiveFeatureIndex(Math.min(index, featureCards.length - 1));
       }
     };
-    
+
     const handleCategoryScroll = () => {
       if (categoriesRef.current) {
         const scrollLeft = categoriesRef.current.scrollLeft;
@@ -109,24 +110,24 @@ const HomePage = () => {
         setActiveCategoryIndex(Math.min(index, popularCategories.length - 1));
       }
     };
-    
+
     const featuresElement = featuresRef.current;
     const categoriesElement = categoriesRef.current;
-    
+
     if (featuresElement) {
-      featuresElement.addEventListener('scroll', handleFeatureScroll);
+      featuresElement.addEventListener("scroll", handleFeatureScroll);
     }
-    
+
     if (categoriesElement) {
-      categoriesElement.addEventListener('scroll', handleCategoryScroll);
+      categoriesElement.addEventListener("scroll", handleCategoryScroll);
     }
-    
+
     return () => {
       if (featuresElement) {
-        featuresElement.removeEventListener('scroll', handleFeatureScroll);
+        featuresElement.removeEventListener("scroll", handleFeatureScroll);
       }
       if (categoriesElement) {
-        categoriesElement.removeEventListener('scroll', handleCategoryScroll);
+        categoriesElement.removeEventListener("scroll", handleCategoryScroll);
       }
     };
   }, [featureCards.length, popularCategories.length]);
@@ -135,30 +136,38 @@ const HomePage = () => {
   useEffect(() => {
     let featuresInterval;
     let categoriesInterval;
-    
+
     if (autoScrollFeatures) {
       featuresInterval = setInterval(() => {
         if (featuresRef.current) {
           const nextIndex = (activeFeatureIndex + 1) % featureCards.length;
-          scrollToIndex(featuresRef, nextIndex, 'feature');
+          scrollToIndex(featuresRef, nextIndex, "feature");
         }
       }, 4000);
     }
-    
+
     if (autoScrollCategories) {
       categoriesInterval = setInterval(() => {
         if (categoriesRef.current) {
-          const nextIndex = (activeCategoryIndex + 1) % popularCategories.length;
-          scrollToIndex(categoriesRef, nextIndex, 'category');
+          const nextIndex =
+            (activeCategoryIndex + 1) % popularCategories.length;
+          scrollToIndex(categoriesRef, nextIndex, "category");
         }
       }, 3500);
     }
-    
+
     return () => {
       clearInterval(featuresInterval);
       clearInterval(categoriesInterval);
     };
-  }, [activeFeatureIndex, activeCategoryIndex, autoScrollFeatures, autoScrollCategories, featureCards.length, popularCategories.length]);
+  }, [
+    activeFeatureIndex,
+    activeCategoryIndex,
+    autoScrollFeatures,
+    autoScrollCategories,
+    featureCards.length,
+    popularCategories.length,
+  ]);
 
   const handleFeatureClick = (card) => {
     if (card.comingSoon) {
@@ -174,14 +183,14 @@ const HomePage = () => {
       navigate(`/chat?query=${encodeURIComponent(searchQuery)}`);
     }
   };
-  
+
   // Scroll handlers
   const scroll = (ref, direction) => {
     if (ref.current) {
       const cardWidth = ref === featuresRef ? 344 : 204; // card width + gap
-      const scrollAmount = direction === 'left' ? -cardWidth : cardWidth;
-      ref.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-      
+      const scrollAmount = direction === "left" ? -cardWidth : cardWidth;
+      ref.current.scrollBy({ left: scrollAmount, behavior: "smooth" });
+
       // Pause auto-scroll when manually scrolling
       if (ref === featuresRef) {
         setAutoScrollFeatures(false);
@@ -192,21 +201,21 @@ const HomePage = () => {
       }
     }
   };
-  
+
   // Scroll to specific index
   const scrollToIndex = (ref, index, itemType) => {
     if (ref.current) {
-      const cardWidth = itemType === 'feature' ? 344 : 204; // card width + gap
-      ref.current.scrollTo({ 
-        left: index * cardWidth, 
-        behavior: 'smooth' 
+      const cardWidth = itemType === "feature" ? 344 : 204; // card width + gap
+      ref.current.scrollTo({
+        left: index * cardWidth,
+        behavior: "smooth",
       });
     }
   };
 
   // Pause auto-scroll on mouse enter
   const handleMouseEnter = (section) => {
-    if (section === 'features') {
+    if (section === "features") {
       setAutoScrollFeatures(false);
     } else {
       setAutoScrollCategories(false);
@@ -215,7 +224,7 @@ const HomePage = () => {
 
   // Resume auto-scroll on mouse leave
   const handleMouseLeave = (section) => {
-    if (section === 'features') {
+    if (section === "features") {
       setAutoScrollFeatures(true);
     } else {
       setAutoScrollCategories(true);
@@ -225,48 +234,59 @@ const HomePage = () => {
   return (
     <div className="home-page">
       <div className="hero-section">
-        <div className="hero-content">
-          <h1>Nyay<span style={{ fontWeight: 400 }}>Guru</span></h1>
-          <h2>Your AI Legal Assistant</h2>
-          <p>Get reliable legal guidance powered by advanced AI technology</p>
-          
-          <form onSubmit={handleSearch} className="search-form">
-            <div className="search-container">
-              <input 
-                type="text" 
-                placeholder="Ask a legal question..." 
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="search-input"
-              />
-              <button type="submit" className="search-button">
-                <i className="bi bi-search"></i>
-              </button>
-            </div>
-          </form>
+        <div className="hero-split-container">
+          <div className="hero-content-left">
+            <h1>Lawzo</h1>
+            <h2>Your AI Legal Assistant</h2>
+            <p>Get reliable legal guidance powered by advanced AI technology</p>
+
+            <form onSubmit={handleSearch} className="search-form">
+              <div className="search-container">
+                <input
+                  type="text"
+                  placeholder="Ask a legal question..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="search-input"
+                />
+                <button type="submit" className="search-button">
+                  <i className="bi bi-search"></i>
+                </button>
+              </div>
+            </form>
+          </div>
+          <div className="hero-content-right">
+            <img 
+              src="/images/hero-illustration.svg" 
+              alt="Legal AI Assistant Illustration" 
+              className="legal-hero-image" 
+            />
+          </div>
         </div>
       </div>
-      
-      <div className="features-section">
+
+      <div id="services" className="features-section">
         <h3>Our Legal Services</h3>
         <div className="scroll-container">
-          <button 
-            className="scroll-button left" 
-            onClick={() => scroll(featuresRef, 'left')}
+          <button
+            className="scroll-button left"
+            onClick={() => scroll(featuresRef, "left")}
             aria-label="Scroll left"
           >
             <i className="bi bi-chevron-left"></i>
           </button>
-          <div 
-            className="feature-cards" 
+          <div
+            className="feature-cards"
             ref={featuresRef}
-            onMouseEnter={() => handleMouseEnter('features')}
-            onMouseLeave={() => handleMouseLeave('features')}
+            onMouseEnter={() => handleMouseEnter("features")}
+            onMouseLeave={() => handleMouseLeave("features")}
           >
             {featureCards.map((card) => (
-              <div 
-                key={card.id} 
-                className={`feature-card ${card.comingSoon ? 'coming-soon' : ''} ${card.highlight ? 'highlight' : ''}`}
+              <div
+                key={card.id}
+                className={`feature-card ${
+                  card.comingSoon ? "coming-soon" : ""
+                } ${card.highlight ? "highlight" : ""}`}
                 onClick={() => handleFeatureClick(card)}
               >
                 <div className="card-icon">
@@ -274,8 +294,10 @@ const HomePage = () => {
                 </div>
                 <h4>{card.title}</h4>
                 <p>{card.description}</p>
-                <button 
-                  className={`card-button ${card.comingSoon ? 'disabled' : ''} ${card.highlight ? 'highlight-btn' : ''}`}
+                <button
+                  className={`card-button ${
+                    card.comingSoon ? "disabled" : ""
+                  } ${card.highlight ? "highlight-btn" : ""}`}
                 >
                   {card.buttonText}
                   {card.comingSoon && <span className="soon-badge">Soon</span>}
@@ -283,45 +305,47 @@ const HomePage = () => {
               </div>
             ))}
           </div>
-          <button 
-            className="scroll-button right" 
-            onClick={() => scroll(featuresRef, 'right')}
+          <button
+            className="scroll-button right"
+            onClick={() => scroll(featuresRef, "right")}
             aria-label="Scroll right"
           >
             <i className="bi bi-chevron-right"></i>
           </button>
-          
+
           <div className="scroll-indicator">
             {featureCards.map((_, index) => (
-              <div 
+              <div
                 key={index}
-                className={`indicator-dot ${index === activeFeatureIndex ? 'active' : ''}`}
-                onClick={() => scrollToIndex(featuresRef, index, 'feature')}
+                className={`indicator-dot ${
+                  index === activeFeatureIndex ? "active" : ""
+                }`}
+                onClick={() => scrollToIndex(featuresRef, index, "feature")}
               />
             ))}
           </div>
         </div>
       </div>
-      
-      <div className="categories-section">
+
+      <div id="category" className="categories-section">
         <h3>Popular Legal Categories</h3>
         <div className="scroll-container">
-          <button 
-            className="scroll-button left" 
-            onClick={() => scroll(categoriesRef, 'left')}
+          <button
+            className="scroll-button left"
+            onClick={() => scroll(categoriesRef, "left")}
             aria-label="Scroll left"
           >
             <i className="bi bi-chevron-left"></i>
           </button>
-          <div 
-            className="category-cards" 
+          <div
+            className="category-cards"
             ref={categoriesRef}
-            onMouseEnter={() => handleMouseEnter('categories')}
-            onMouseLeave={() => handleMouseLeave('categories')}
+            onMouseEnter={() => handleMouseEnter("categories")}
+            onMouseLeave={() => handleMouseLeave("categories")}
           >
             {popularCategories.map((category, index) => (
-              <div 
-                key={index} 
+              <div
+                key={index}
                 className="category-card"
                 onClick={() => navigate(category.path)}
               >
@@ -330,28 +354,30 @@ const HomePage = () => {
               </div>
             ))}
           </div>
-          <button 
-            className="scroll-button right" 
-            onClick={() => scroll(categoriesRef, 'right')}
+          <button
+            className="scroll-button right"
+            onClick={() => scroll(categoriesRef, "right")}
             aria-label="Scroll right"
           >
             <i className="bi bi-chevron-right"></i>
           </button>
-          
+
           <div className="scroll-indicator">
             {popularCategories.map((_, index) => (
-              <div 
+              <div
                 key={index}
-                className={`indicator-dot ${index === activeCategoryIndex ? 'active' : ''}`}
-                onClick={() => scrollToIndex(categoriesRef, index, 'category')}
+                className={`indicator-dot ${
+                  index === activeCategoryIndex ? "active" : ""
+                }`}
+                onClick={() => scrollToIndex(categoriesRef, index, "category")}
               />
             ))}
           </div>
         </div>
       </div>
-      
-      <div className="benefits-section">
-        <h3>Why Choose NyayGuru?</h3>
+
+      <div id="why-us" className="benefits-section">
+        <h3>Why Choose Lawzo?</h3>
         <div className="benefits-grid">
           <div className="benefit-item">
             <i className="bi bi-shield-check"></i>
@@ -379,4 +405,4 @@ const HomePage = () => {
   );
 };
 
-export default HomePage; 
+export default HomePage;

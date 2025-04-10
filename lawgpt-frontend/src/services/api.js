@@ -1,7 +1,7 @@
 import axios from "axios";
 
-// Change the API URL to point directly to the backend server
-const API_URL = "http://localhost:8000/api";
+// Update API URL to use relative path or environment variable if available
+const API_URL = import.meta.env.VITE_API_URL || "/api";
 
 // Create axios instance with default config
 const axiosInstance = axios.create({
@@ -54,10 +54,36 @@ const api = {
   // Auth endpoints
   register: async (userData) => {
     try {
+      console.log("Registering new user:", userData.username);
+      
       const response = await axiosInstance.post('/auth/register', userData);
-      return response.data;
+      console.log("Registration API response:", response.data);
+      
+      // The backend now returns both token and user data directly
+      if (!response.data || !response.data.access_token) {
+        throw new Error("Invalid response from server. Missing access token.");
+      }
+      
+      return {
+        token: response.data.access_token,
+        user: response.data.user || userData // Fallback to input userData if no user in response
+      };
     } catch (error) {
       console.error("Registration error:", error);
+      
+      // Provide more descriptive error messages
+      if (error.response) {
+        if (error.response.status === 400) {
+          if (error.response.data.detail?.includes('Email already registered')) {
+            throw new Error("This email is already registered. Please use a different email or try logging in.");
+          } else if (error.response.data.detail?.includes('Username already taken')) {
+            throw new Error("This username is already taken. Please choose a different username.");
+          } else if (error.response.data.detail) {
+            throw new Error(error.response.data.detail);
+          }
+        }
+      }
+      
       throw error;
     }
   },
@@ -77,22 +103,29 @@ const api = {
         timeout: 15000 // Longer timeout specifically for login
       });
       
+      console.log("Login API response:", response.data);
+      
       if (!response.data || !response.data.access_token) {
         throw new Error("Invalid response from server. Missing access token.");
       }
       
-      // Log successful login
-      console.log("Login successful, token received");
+      // Use the user data from the response if available, or create a basic user object
+      const userData = response.data.user || { 
+        username: email.split('@')[0], 
+        email: email 
+      };
       
-      // The backend only returns access_token and token_type
-      // Create a user object from the email as username
       return {
         token: response.data.access_token,
+<<<<<<< HEAD
         user: { 
           username: email.split('@')[0], 
           email: email,
           user_type: userType
         }
+=======
+        user: userData
+>>>>>>> 075b9a52b7599dffb32878a80b773bd023c4205c
       };
     } catch (error) {
       console.error("Login error:", error);
@@ -185,15 +218,28 @@ const api = {
         timeout: 15000 // Longer timeout specifically for Google login
       });
       
+      console.log("Google login API response:", response.data);
+      
+      // Make sure we have the necessary data
       if (!response.data || !response.data.access_token) {
         throw new Error("Invalid response from server. Missing access token.");
       }
       
-      console.log("Google login successful, token received");
+      // In case the backend doesn't return a user object, create a basic one
+      let userData = response.data.user;
+      if (!userData && response.data.email) {
+        userData = {
+          email: response.data.email,
+          username: response.data.email.split('@')[0],
+          full_name: response.data.name || ''
+        };
+      }
+      
+      console.log("Google login successful, returning data");
       
       return {
         token: response.data.access_token,
-        user: response.data.user
+        user: userData || { username: 'user' + Date.now() }
       };
     } catch (error) {
       console.error("Google login error:", error);

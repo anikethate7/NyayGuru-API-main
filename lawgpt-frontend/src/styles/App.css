@@ -3,25 +3,25 @@
 @import 'bootstrap-icons/font/bootstrap-icons.css';
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap');
 
-/* Custom Variables - Updated Theme to match HomePage */
+/* Custom Variables - Updated Theme to match Modern Design */
 :root {
   /* Primary Colors */
-  --primary: #3563E9;
-  --primary-dark: #2851C2;
-  --primary-light: #EEF3FF;
+  --primary: #7C3AED;
+  --primary-dark: #6D28D9;
+  --primary-light: #F5F3FF;
   
   /* Text Colors */
-  --text-primary: #1A1A1A;
-  --text-secondary: #4B5563;
-  --text-light: #6B7280;
+  --text-primary: #1E293B;
+  --text-secondary: #64748B;
+  --text-light: #94A3B8;
   
   /* Background Colors */
-  --background: #F9FAFB;
+  --background: #FFFFFF;
   --white: #FFFFFF;
   
   /* UI Elements */
-  --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  --hover-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  --card-shadow: 0 4px 12px rgba(124, 58, 237, 0.08);
+  --hover-shadow: 0 10px 25px rgba(124, 58, 237, 0.12);
   --border-radius: 12px;
   
   /* Spacing */
@@ -35,34 +35,39 @@
   --transition: all 0.3s ease;
   
   /* Fonts */
-  --font-heading: 'Playfair Display', serif;
-  --font-body: 'Poppins', sans-serif;
+  --font-heading: 'Plus Jakarta Sans', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  
+  /* Accent Colors */
+  --accent: #F97316;
+  --accent-light: #FFF7ED;
+  --accent-dark: #EA580C;
   
   /* Legacy variables for compatibility */
   --primary-color: var(--primary);
   --primary-light: var(--primary-light);
   --primary-dark: var(--primary-dark);
-  --secondary-color: var(--primary-light);
-  --secondary-light: var(--primary-light);
-  --secondary-dark: var(--primary);
-  --accent-color: var(--primary-dark);
+  --secondary-color: var(--accent);
+  --secondary-light: var(--accent-light);
+  --secondary-dark: var(--accent-dark);
+  --accent-color: var(--accent);
   --text-color: var(--text-primary);
   --light-text-color: var(--text-secondary);
   --background-color: var(--background);
   --surface-color: var(--white);
-  --bot-message-color: var(--primary-light);
-  --bot-message-border: var(--primary-light);
+  --bot-message-color: #F5F3FF;
+  --bot-message-border: #E9D5FF;
   --user-message-color: var(--primary);
   --user-message-text: var(--white);
   --sidebar-bg: var(--white);
   --sidebar-width: 280px;
-  --sidebar-item-hover: rgba(53, 99, 233, 0.1);
-  --sidebar-item-active: rgba(53, 99, 233, 0.15);
+  --sidebar-item-hover: rgba(124, 58, 237, 0.05);
+  --sidebar-item-active: rgba(124, 58, 237, 0.1);
   --header-height: 70px;
   --footer-height: 40px;
-  --success-color: var(--primary);
-  --warning-color: var(--primary-light);
-  --error-color: #DC2626;
+  --success-color: #10B981;
+  --warning-color: #F97316;
+  --error-color: #EF4444;
   --box-shadow: var(--card-shadow);
 }
 
@@ -145,6 +150,9 @@ body {
   font-weight: 600;
   margin: 0;
   color: var(--primary);
+  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .navbar-brand .tagline {
@@ -196,15 +204,15 @@ body {
 }
 
 .nav-link.signup {
-  background-color: var(--primary);
-  color: var(--white);
+  background-color: var(--accent);
+  color: white;
   box-shadow: var(--card-shadow);
   font-weight: 500;
   letter-spacing: 0.3px;
 }
 
 .nav-link.signup:hover {
-  background-color: var(--primary-dark);
+  background-color: var(--accent-dark);
   transform: translateY(-2px);
   box-shadow: var(--hover-shadow);
 }
@@ -237,7 +245,7 @@ body {
   gap: var(--spacing-xs);
   padding: 0.5rem 1rem;
   border-radius: var(--border-radius);
-  background-color: var(--primary-light);
+  background-color: var(--background);
   transition: var(--transition);
 }
 
@@ -467,7 +475,7 @@ body {
 }
 
 .user-message {
-  background-color: var(--user-message-color);
+  background-color: var(--primary);
   color: var(--user-message-text);
   border-radius: var(--border-radius) 0 var(--border-radius) var(--border-radius);
 }
@@ -613,10 +621,11 @@ body {
 .input-wrapper {
   display: flex;
   gap: 10px;
-  background-color: var(--bot-message-color);
+  background-color: #F5F3FF;
   border-radius: var(--border-radius);
   padding: 5px;
   box-shadow: var(--box-shadow);
+  border: 1px solid #E9D5FF;
 }
 
 .message-input {
@@ -625,7 +634,7 @@ body {
   border: none;
   background: transparent;
   font-size: 15px;
-  color: var(--text-color);
+  color: var(--text-primary);
   outline: none;
   resize: none;
   min-height: 24px;
@@ -633,11 +642,11 @@ body {
 }
 
 .message-input::placeholder {
-  color: var(--light-text-color);
+  color: var(--text-light);
 }
 
 .send-button {
-  background-color: var(--primary-color);
+  background-color: var(--accent);
   color: white;
   border: none;
   border-radius: var(--border-radius);
@@ -650,7 +659,7 @@ body {
 }
 
 .send-button:hover {
-  background-color: var(--primary-dark);
+  background-color: var(--accent-dark);
 }
 
 .send-button.disabled {
@@ -918,17 +927,15 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--surface-color);
-  border-radius: 10px;
+  background: var(--background);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--primary-dark);
-  border-radius: 10px;
+  background: var(--primary-light);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--primary-color);
+  background: var(--primary);
 }
 
 /* Animations */
@@ -1187,15 +1194,15 @@ body {
 }
 
 .notification.success {
-  background-color: #d4edda;
-  color: #155724;
-  border-left: 4px solid #28a745;
+  background-color: #ECFDF5;
+  color: #065F46;
+  border-left: 4px solid #10B981;
 }
 
 .notification.error {
-  background-color: #f8d7da;
-  color: #721c24;
-  border-left: 4px solid #dc3545;
+  background-color: #FEF2F2;
+  color: #B91C1C;
+  border-left: 4px solid #EF4444;
 }
 
 .notification i {

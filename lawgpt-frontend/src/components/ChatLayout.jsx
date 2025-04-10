@@ -63,7 +63,7 @@ const ChatLayout = () => {
         <div className="sidebar-header">
           <div className="logo">
             <i className="bi bi-scale"></i>
-            <h1>NyayGURU</h1>
+            <h1>Lawzo</h1>
           </div>
           <button className="collapse-btn" onClick={toggleSidebar}>
             <i className={`bi ${sidebarCollapsed ? 'bi-chevron-right' : 'bi-chevron-left'}`}></i>
