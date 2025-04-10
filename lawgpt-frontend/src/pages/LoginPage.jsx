@@ -211,7 +211,7 @@ const LoginPage = () => {
       <div className={`auth-form-wrapper ${pageLoaded ? 'fade-in' : ''}`}>
         <div className="auth-header">
           <i className="bi bi-scale"></i>
-          <h1>NyayGuru</h1>
+          <h1>Lawzo</h1>
         </div>
 
         <h2>Login to Your Account</h2>

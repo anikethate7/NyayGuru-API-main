@@ -10,26 +10,26 @@ logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
 )
-logger = logging.getLogger("nyayguru")
+logger = logging.getLogger("lawzo")
 
 # Prometheus metrics
 REQUEST_COUNT = Counter(
-    'nyayguru_requests_total',
+    'lawzo_requests_total',
     'Total count of requests',
     ['method', 'endpoint', 'status_code']
 )
 REQUEST_LATENCY = Histogram(
-    'nyayguru_request_duration_seconds',
+    'lawzo_request_duration_seconds',
     'Request duration in seconds',
     ['method', 'endpoint']
 )
 ERROR_COUNT = Counter(
-    'nyayguru_errors_total',
+    'lawzo_errors_total',
     'Total count of errors',
     ['method', 'endpoint', 'exception_type']
 )
 CHAT_REQUEST_COUNT = Counter(
-    'nyayguru_chat_requests_total',
+    'lawzo_chat_requests_total',
     'Total count of chat requests',
     ['category', 'language']
 )

@@ -6,6 +6,7 @@ from passlib.context import CryptContext
 from uuid import uuid4
 import requests
 import json
+from typing import Optional
 
 from app.config import settings
 from app.models.schemas import Token, User, UserCreate

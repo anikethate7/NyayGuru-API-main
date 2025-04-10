@@ -147,6 +147,21 @@ const AppLayout = () => {
               <DocumentAnalysis />
             </ProtectedRoute>
           } />
+          <Route path="/services" element={
+            <ProtectedRoute>
+              <NotFound />
+            </ProtectedRoute>
+          } />
+          <Route path="/category" element={
+            <ProtectedRoute>
+              <NotFound />
+            </ProtectedRoute>
+          } />
+          <Route path="/why-us" element={
+            <ProtectedRoute>
+              <NotFound />
+            </ProtectedRoute>
+          } />
           <Route path="/" element={
             <ProtectedRoute>
               <HomePage />
@@ -160,7 +175,7 @@ const AppLayout = () => {
       {!isAuthPage && !isChatPage && !isDocumentPage && (
         <footer className="app-footer">
           <div className="footer-content">
-            <p>&copy; {new Date().getFullYear()} NyayGuru - Legal AI Assistant. All rights reserved.</p>
+            <p>&copy; {new Date().getFullYear()} Lawzo - Legal AI Assistant. All rights reserved.</p>
           </div>
         </footer>
       )}

@@ -14,7 +14,7 @@ os.makedirs("./LEGAL-DATA", exist_ok=True)
 os.makedirs("./LEGAL-DATA/user_uploads", exist_ok=True)
 
 app = FastAPI(
-    title="LawGPT API",
+    title="Lawzo API",
     description="A legal chatbot API using RAG architecture",
     version="1.0.0",
 )

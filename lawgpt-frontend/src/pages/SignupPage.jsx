@@ -92,8 +92,12 @@ const SignupPage = () => {
     setError("");
 
     try {
+      // Generate a more unique username by adding a timestamp to prevent conflicts
+      const timestamp = new Date().getTime().toString().slice(-4);
+      const username = `${formData.firstName.toLowerCase()}${formData.lastName.toLowerCase()}${timestamp}`;
+      
       const userData = {
-        username: `${formData.firstName.toLowerCase()}${formData.lastName.toLowerCase()}`,
+        username: username,
         full_name: `${formData.firstName} ${formData.lastName}`,
         email: formData.email,
         password: formData.password,
@@ -113,10 +117,14 @@ const SignupPage = () => {
     setError("");
     
     try {
+      console.log("Google login success, received credential", credentialResponse);
+      
       // Send the Google token to our backend using API service
       const response = await api.googleLogin(credentialResponse.credential);
+      console.log("Google login API response:", response);
       
       // Update auth context with Google data
+      // Pass the response directly to signup, not wrapped in another object
       await signup(null, response);
       
       // Redirect
@@ -145,7 +153,7 @@ const SignupPage = () => {
       <div className={`auth-form-wrapper ${pageLoaded ? 'fade-in' : ''}`}>
         <div className="auth-header">
           <i className="bi bi-scale"></i>
-          <h1>NyayGuru</h1>
+          <h1>Lawzo</h1>
         </div>
 
         <h2>Create Your Account</h2>

@@ -10,7 +10,7 @@ load_dotenv()
 class Settings(BaseSettings):
     # API settings
     API_V1_STR: str = "/v1"
-    PROJECT_NAME: str = "LawGPT"
+    PROJECT_NAME: str = "Lawzo"
     
     # Database settings
     DATABASE_URL: str = os.getenv("DATABASE_URL", "sqlite:///./new_app.db")

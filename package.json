@@ -1,7 +1,7 @@
 {
-  "name": "nyayguru-api",
+  "name": "lawzo-api",
   "version": "1.0.0",
-  "description": "NyayGuru Legal AI Assistant API",
+  "description": "Lawzo Legal AI Assistant API",
   "scripts": {
     "dev:backend": "python dev.py",
     "dev:frontend": "cd lawgpt-frontend && npm run dev",
@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/yourusername/nyayguru-api.git"
+    "url": "git+https://github.com/yourusername/lawzo-api.git"
   },
   "keywords": [
     "legal",

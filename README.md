@@ -1,6 +1,6 @@
-# NyayGuru API - Production Grade Legal Chatbot
+# Lawzo API - Production Grade Legal Chatbot
 
-NyayGuru API (also known as LawGPT) is a legal AI chatbot that provides information about various legal topics in multiple languages. This project uses a Retrieval-Augmented Generation (RAG) architecture to deliver accurate and contextually relevant legal information.
+Lawzo API (also known as LawGPT) is a legal AI chatbot that provides information about various legal topics in multiple languages. This project uses a Retrieval-Augmented Generation (RAG) architecture to deliver accurate and contextually relevant legal information.
 
 ## Features
 
@@ -229,7 +229,7 @@ For support or inquiries, please reach out to the development team.
 
 ## Setting Up Google OAuth
 
-To enable Google login functionality in NyayGuru:
+To enable Google login functionality in Lawzo:
 
 1. Go to the [Google Cloud Console](https://console.cloud.google.com/)
 2. Create a new project or select an existing one
